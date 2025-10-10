@@ -19,28 +19,27 @@ function buildBirthdayChars() {
   const el = document.getElementById('bd-text');
   if (!el) return;
 
-  const text = el.getAttribute('data-text') || '';
-  el.textContent = ''; // clear existing
+  const text = (el.getAttribute('data-text') || '').trim();
+  el.textContent = '';
 
-  let i = 0; // cumulative index for delays
+  let i = 0; // global index for staggered delays across all letters
+  const words = text.split(' ');
 
-  for (const ch of text) {
-    if (ch === ' ') {
-      const gap = document.createElement('span');
-      gap.className = 'ch space';
-      gap.innerHTML = '&nbsp;';
-      // add a small pause before next word: skip a few delay slots
-      gap.style.setProperty('--i', i);
-      el.appendChild(gap);
-      i += 6; // word gap; increase/decrease to slow/speed word-to-word timing
-      continue;
+  words.forEach((word, wIdx) => {
+    const w = document.createElement('span');
+    w.className = 'w'; // no-wrap word container
+    for (const ch of word) {
+      const s = document.createElement('span');
+      s.className = 'ch';
+      s.textContent = ch;
+      s.style.setProperty('--i', i++);
+      w.appendChild(s);
     }
-    const span = document.createElement('span');
-    span.className = 'ch';
-    span.textContent = ch;
-    span.style.setProperty('--i', i++);
-    el.appendChild(span);
-  }
+    el.appendChild(w);
+
+    // Add a small pause before the next word starts dropping
+    if (wIdx < words.length - 1) i += 6; // tune this gap for pacing
+  });
 }
 
 /* Trigger AFTER your flower animation finishes */

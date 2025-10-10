@@ -1377,39 +1377,50 @@ body {
   top:10%;
   left:50%;
   transform:translateX(-50%);
-  text-align:center;
-  font-family:'Great Vibes', cursive; /* or Sacramento/Allura */
-  font-size:3.6vmin;
-  color:#b0fff0;
-  letter-spacing:0.18em;
-  text-shadow:0 0 14px rgba(176,255,240,.9), 0 0 28px rgba(0,255,214,.25);
-  opacity:0;
-  pointer-events:none;
   z-index:2000;
+  pointer-events:none;
+  opacity:0;                /* revealed via .show */
+  text-align:center;
+  font-family:'Cinzel', serif;
+  /* responsive, larger on mobile but capped */
+  font-size:clamp(22px, 5.4vmin, 44px);
+  line-height:1.15;
+  letter-spacing:0.10em;
+  color:#b0fff0;
+  text-shadow:0 0 12px rgba(176,255,240,.85), 0 0 28px rgba(0,255,214,.2);
+  max-width:92vw;           /* contain within the viewport */
 }
+
+/* once triggered */
 .birthday-text.show{ opacity:1; }
 
-/* Each character span */
+/* Each word is a no-wrap block so it never splits */
+.birthday-text .w{
+  display:inline-block;
+  white-space:nowrap;       /* <— key: no break inside a word */
+  margin:0 0.22em;          /* spacing between words */
+}
+
+/* letters animate inside each word */
 .birthday-text .ch{
   display:inline-block;
   transform:translateY(-160px) rotate(8deg);
   opacity:0;
   animation:letter-drop 700ms cubic-bezier(.22,1,.36,1) forwards;
-  animation-delay:calc(var(--i) * 65ms);   /* 65ms per letter; tweak to taste */
-}
-
-/* nicer spacing for spaces */
-.birthday-text .space{
-  width:0.55em;                /* visual gap */
-  animation: none;             /* no animation on the gap itself */
-}
-
-/* Motion-reduced users: keep it still but visible */
-@media (prefers-reduced-motion: reduce){
-  .birthday-text .ch{ animation:none; opacity:1; transform:none; }
+  animation-delay:calc(var(--i) * 65ms);
 }
 
 @keyframes letter-drop{
   70%{ transform:translateY(8px) rotate(-4deg); opacity:1; }
   100%{ transform:translateY(0) rotate(0); opacity:1; }
+}
+
+/* motion accessibility */
+@media (prefers-reduced-motion: reduce){
+  .birthday-text .ch{ animation:none; opacity:1; transform:none; }
+}
+
+/* very small phones: slightly bigger + tighter top offset */
+@media (max-width:420px){
+  .birthday-text{ top:8%; font-size:clamp(22px, 6.2vmin, 44px); }
 }
