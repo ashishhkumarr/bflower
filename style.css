@@ -993,4 +993,59 @@ body {
   animation-play-state: paused !important;
 }
 
+/* Birthday text base */
+.birthday-text {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-family: "Great Vibes", cursive; /* or Sacramento/Allura */
+  font-size: 3.6vmin;
+  color: #b0fff0;
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 14px rgba(176, 255, 240, 0.9), 0 0 28px rgba(0, 255, 214, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2000;
+}
+
+.birthday-text.show {
+  opacity: 1;
+}
+
+/* Each character span */
+.birthday-text .ch {
+  display: inline-block;
+  transform: translateY(-160px) rotate(8deg);
+  opacity: 0;
+  animation: letter-drop 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--i) * 65ms); /* 65ms per letter; tweak to taste */
+}
+
+/* nicer spacing for spaces */
+.birthday-text .space {
+  width: 0.55em; /* visual gap */
+  animation: none; /* no animation on the gap itself */
+}
+
+/* Motion-reduced users: keep it still but visible */
+@media (prefers-reduced-motion: reduce) {
+  .birthday-text .ch {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes letter-drop {
+  70% {
+    transform: translateY(8px) rotate(-4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) rotate(0);
+    opacity: 1;
+  }
+}
+
 /*# sourceMappingURL=style.css.map */
